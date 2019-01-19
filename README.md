@@ -1,6 +1,4 @@
 # XmlContentDsc
-
-# XmlContentDsc
 Build | Status | Last Commit | Latest Release
 --- | --- | --- | ---
 Develop | [![Build status dev](https://ci.appveyor.com/api/projects/status/9yynk81k3k05nasp/branch/develop?svg=true)](https://ci.appveyor.com/project/automatedlab/XmlContentDsc) | [![GitHub last commit](https://img.shields.io/github/last-commit/AutomatedLab/XmlContentDsc/dev.svg)](https://github.com/AutomatedLab/XmlContentDsc/tree/dev/)
