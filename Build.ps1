@@ -21,7 +21,7 @@ Param (
 
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
 $buildModulesPath = Join-Path -Path $BuildOutput -ChildPath Modules
-$projectPath = $PSScriptRoot
+$projectPath = "$PSScriptRoot\Modules\XmlContentDsc"
 $timeStamp = Get-Date -UFormat "%Y%m%d-%H%M%S"
 $psVersion = $PSVersionTable.PSVersion.Major
 $lines = '----------------------------------------------------------------------'
