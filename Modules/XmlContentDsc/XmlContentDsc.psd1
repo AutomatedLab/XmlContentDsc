@@ -5,11 +5,11 @@
 
     GUID                 = '5810d7ae-53c4-4670-83e9-ba5d5e55db95'
 
-    Author               = 'NA'
+    Author               = 'Raimund Andree'
 
-    CompanyName          = 'NA'
+    CompanyName          = 'Microsoft'
 
-    Copyright            = 'NA'
+    Copyright            = '2018'
 
     Description          = 'Module with DSC Resources for managing XML file content'
 
