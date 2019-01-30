@@ -81,11 +81,12 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
 }
 
 if (-not $Tasks) {
-    task . ClearBuildOutput,
-    Init,
+    task . Init, #ClearBuildOutput,
+    #Init,
     SetPsModulePath,
     CopyModule,
-    #IntegrationTest,
+    UnitTest,
+    IntegrationTest,
     Deploy
     #AcceptanceTest
 

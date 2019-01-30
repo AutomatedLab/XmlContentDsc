@@ -16,6 +16,14 @@
     PowerShellVersion    = '4.0'
 
     CLRVersion           = '4.0'
+	
+	NestedModules = @(
+        'DSCClassResources\XmlContent\XmlContent.psd1'
+    )
+	
+	DscResourcesToExport = @(
+        'XmlContent'
+    )
 
     PrivateData          = @{
 
@@ -28,6 +36,4 @@
             ProjectUri = 'https://github.com/PowerShell/xWebAdministration'
         }
     }
-
-    DscResourcesToExport = 'XmlFileContentResource'
 }

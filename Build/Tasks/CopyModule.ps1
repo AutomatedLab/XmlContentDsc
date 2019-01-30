@@ -17,6 +17,6 @@ task CopyModule {
     }
 
     Write-Build Green "Copy folder '$($projectPath.FullName)\$($env:BHProjectName)' to '$buildOutput'" Green
-    Copy-Item -Path "$($projectPath.FullName)\$($env:BHProjectName)" -Destination $buildOutput\Modules -Recurse -Force
+    Copy-Item -Path $env:BHModulePath -Destination "$($env:BHBuildOutput)\Modules" -Recurse -Force
 
 }

@@ -1,0 +1,99 @@
+$script:DSCModuleName = 'XmlContentDsc'
+$script:DSCResourceName = 'XmlContent'
+$global:testXmlContent = @'
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <runtime>
+        <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+            <dependentAssembly>
+                <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+                <bindingRedirect oldVersion="0.0.0.0-8.0.0.0" newVersion="8.0.0.0" />
+            </dependentAssembly>
+        </assemblyBinding>
+        <ToBeRemoved>
+            <SomeElement />
+        </ToBeRemoved>
+        <SomeElement ToBeRemoved = "123" >
+            <SomeSubElement />
+        </SomeElement>
+    </runtime>
+</configuration>
+'@
+
+#region HEADER
+# Unit Test Template Version: 1.1.0
+#$script:moduleRoot = Join-Path -Path $(Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $Script:MyInvocation.MyCommand.Path))) -ChildPath ''
+$script:moduleRoot = "$($env:BHBuildOutput)\Modules\$($env:BHProjectName)"
+#$script:moduleRoot = $env:BHBuildOutput
+if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
+    (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) ) {
+    & git @('clone', 'https://github.com/PowerShell/DscResource.Tests.git', (Join-Path -Path $script:moduleRoot -ChildPath '\DSCResource.Tests\'))
+}
+
+#$r = "$($env:BHBuildOutput)\DSCResource.Tests"
+#& git @('clone', 'https://github.com/PowerShell/DscResource.Tests.git', $r)
+
+Import-Module (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1') -Force
+$TestEnvironment = Initialize-TestEnvironment `
+    -DSCModuleName $script:DSCModuleName `
+    -DSCResourceName $script:DSCResourceName `
+    -ResourceType Class `
+    -TestType Unit
+#endregion HEADER
+
+# Begin Testing
+try {
+    #region Pester Tests
+    InModuleScope $script:DSCModuleName {
+
+        #Mock -CommandName Get-Content -MockWith { $global:testXmlContent }
+
+        Describe 'XmlContent' {
+            BeforeEach {
+                Mock -CommandName Add-Content
+                Mock -CommandName Set-Content
+            }
+
+            Context 'XML file contains element defined via XPath' {
+                Mock -CommandName Get-Content -MockWith { $global:testXmlContent } -Verifiable
+                
+                $testParams = @{
+                    Path       = 'NA'
+                    XPath      = '/configuration/runtime/SomeElement'
+                    Ensure     = 'Present'
+                    #Attributes = @{}
+                    Attributes = @{ ToBeRemoved = '123' }
+                }
+
+                $instance = New-Object XmlContent -Property $testParams
+
+                It "Testing an exsiting element should return 'Present' for 'Ensure'" {
+                    #Mock -CommandName Get-Content -MockWith { $global:testXmlContent }
+                    #Mock -CommandName Get-Content -MockWith { 'test' } -ModuleName XmlContentDsc
+                    #Mock -CommandName Get-Content -MockWith { 'test' } -ModuleName XmlContent
+                    $t1 = Get-Content -Path sads
+                    $m1 = $MyInvocation
+                    #($instance.Get()).Ensure | Should -Be $testParams.Ensure
+                    $instance.Get()
+
+                    $t2 = x
+
+                    #Assert-MockCalled -CommandName Get-Content -Times 1 -Exactly -ParameterFilter {} -ModuleName XmlContentDsc -Scope it
+                }
+
+                It 'Should return false from the test method' {
+                    #Mock -CommandName Get-Content -MockWith { $global:testXmlContent }
+                    #$t = Get-Content -Path sads
+
+                    #$instance.Test() | Should -Be $true
+                }
+            }
+        }
+    } #end InModuleScope $DSCResourceName
+    #endregion
+}
+finally {
+    #region FOOTER
+    #Restore-TestEnvironment -TestEnvironment $TestEnvironment
+    #endregion
+}
